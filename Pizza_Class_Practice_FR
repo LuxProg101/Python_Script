@@ -1,0 +1,108 @@
+import os
+
+class Pizza:
+    global liste_pizz
+    def __init__(self, nom="no name", prix=0.0, Ingredients=None, vege=False):
+        if Ingredients is None:
+            Ingredients = []
+        self.nom = nom
+        self.prix = prix
+        self.Ingredients = Ingredients
+        self.vege = vege
+        self.Afficher_Menu()
+
+    def Afficher_Menu(self):
+        print("NOM:", self.nom)
+        print("PRIX:", self.prix, "$")
+        print("INGREDIENTS:", ", ".join(self.Ingredients))
+        if self.vege != True:
+            print()
+        else:
+            print("VEGETARIEN")
+            print()
+        
+
+class Custom_Pizza(Pizza):
+        prix_base_pizza = 5.0
+        prix_ing = 2.0
+        instance_nb = 0
+        
+        def __init__(self, nom="", prix=0, Ingredients=None, vege=False):
+            if Ingredients is None:
+                Ingredients = []
+            Custom_Pizza.instance_nb += 1
+            self.nb = Custom_Pizza.instance_nb
+
+            super().__init__("Custom Pizza " + str(self.nb), prix, Ingredients, vege)
+            os.system('cls')
+            self.cuspizz()
+            self.Calcul_ing()
+            self.Afficher_Menu()
+
+        def cuspizz(self):
+            print("Prix de base:",self.prix_base_pizza, "$")
+            while True:
+                ingredient = input("Ajouter des ingredient(Entrez 'ENTER' pour terminer):")
+                if ingredient.lower() == "n" or ingredient.lower() == "":
+                    os.system('cls')
+                    break
+                self.Ingredients.append(ingredient)
+
+
+        def Calcul_ing(self):        
+            self.prix = len(self.Ingredients) * self.prix_ing + self.prix_base_pizza
+            liste_pizz.append(self)
+
+
+
+
+
+#----------------------------------------------DEBUT DU PROGRAMME------------------------------------------------------------------
+os.system('cls')
+liste_pizz = [
+    Pizza("Pizza 4 Fromage", 12.50, ["sauce tomate", "brie", "mozzarella", "suisse", "bleu"], False ),
+    Pizza("Pizza All Dressed", 13.50, ["sauce tomate", "poivron", "onion", "champignon", "tomate", "pepperoni", "mozzarella"], False),
+    Pizza("Pizza VEGE", 10.25, ["sauce tomate", "onion", "poivron", "champignon", "tomate", "brocoli"], True ),
+]
+
+#------Tri la liste base avec le prix-----
+def tri(e):
+    return e.prix
+liste_pizz.sort(key=tri, reverse=True)
+
+#-----------Program_Custom_Pizza------------------
+while True:
+    coo = input("Voulez vous une pizza custom (Oui - Non):")
+    if coo.lower() == "oui" or coo.lower() == "o":
+        os.system('cls')
+        Custom_Pizza(f"Pizza Custom")
+    
+    elif coo.lower() != "oui" or coo.lower() != "o":
+        break
+    else:
+        print()
+os.system('cls')
+for i in liste_pizz:
+    i.Afficher_Menu()
+
+
+
+#------------Other_Functions(Not_in_Use)-----------
+def pizvege():
+    print("Voici les Pizzas VEGE:")
+    for vegetar in liste_pizz:
+        if vegetar.vege:
+            vegetar.Afficher_Menu()
+
+def pizzatomate():
+    print("pizza avec tomate incluse")
+    for i in liste_pizz:
+        if "tomate" in i.Ingredients:
+            i.Afficher_Menu()
+
+def enbas12():
+    print("Les pizza en bas de 12$")
+    for i in liste_pizz:
+        if i.prix < 12:
+            i.Afficher_Menu()
+#-------------------------------------------------------------------------------------------------------------------------
