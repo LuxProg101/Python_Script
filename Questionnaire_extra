@@ -1,0 +1,136 @@
+#~~~~LuxProg101~~~~~
+
+import time
+import os
+
+
+
+#----------------------------------------------DEBUT DES CLASSES------------------------------------------------------------------
+score = 0
+
+class Question:
+    def __init__(self, titre, choix, reponse):
+        self.titre = titre
+        self.choix = choix
+        self.reponse = reponse
+
+    def __str__(self):
+        return f"Question: {self.titre}, Choices: {self.choix}, Answer: {self.reponse}"
+
+    def Poser_Question(self):
+        print("Question :", self.titre)
+        for i in range(len(self.choix)):
+            print("  ", i+1, "-", self.choix[i])
+        print("")
+        self.verifier_reponse()
+
+    def verifier_reponse(self):
+        global score
+        Q = input("Reponse : ")
+        if Q == self.reponse:
+            print("Bonne reponse")
+            score += 1
+        else:
+            print("Mauvaise reponse")
+        time.sleep(2)
+        os.system('cls')
+
+
+class Question_Custom():
+    def __init__(self, titre=None, choix=None, reponse=None):
+        global CUSTOM_QUESTIONNAIRE
+        self.titre = input("Quelle est votre question ? ")
+        self.choix = self.cho()
+        self.reponse = self.rep()
+        CUSTOM_QUESTIONNAIRE.append(Question(self.titre, self.choix, self.reponse))
+
+    def cho(self):
+        choi = []
+        for i in range(4):
+            c = input(f"Entrez le choix {i + 1}: ")
+            choi.append(c)
+        return choi
+
+    def rep(self):
+        r = input("Choisissez le numéro correspondant à la bonne réponse: ")
+        return r
+
+
+
+class Questionnaire:
+    def __init__(self, questions):
+        self.questions = questions
+
+
+    def lancer(self):
+        for question in self.questions:
+            question.Poser_Question()
+
+
+
+#-------------------------------------------QUESTIONNAIRE----------------------------------------------------------------------------------------
+MATH_QUESTIONNAIRE = [
+Question("Combien font 2 + 2 ?", ["1", "2", "3", "4"], "4"),
+Question("Combien font 2 * 2 ?", ["1", "2", "3", "4"], "4"),
+Question("Combien font 2 - 2 ?", ["0", "2", "-1", "4"], "1"),
+Question("Combien font 2 / 2 ?", ["0", "1", "4", "2"], "0"),
+Question("Combien font 2 + 3 ?", ["1", "4", "6", "5"], "4"),
+# Question("Ajouter votre Question ici", ["Choix 1", "Choix 2", "Choix 3", "Choix 4"], "Reponse"),
+]
+
+
+GEO_QUESTIONNAIRE = [
+Question("Quelle est la capitale de la France ?", ["Marseille", "Nice", "Paris", "Nates"], "3"),
+Question("Quelle est la capitale du Quebec ?", ["Marseille", "Quebec", "Paris", "Canada"], "2"),
+Question("Quelle est la capitale de l'italie ?", ["Rome", "Quebec", "Paris", "Canada"], "1"),
+Question("Quelle est la capitale de l'Espagne ?", ["Madrid", "Quebec", "Paris", "Canada"], "1"),
+Question("Quelle est la capitale de l'Allemagne ?", ["Berlin", "Quebec", "Paris", "Canada"], "1")
+# Question("Ajouter votre Question ici", ["Choix 1", "Choix 2", "Choix 3", "Choix 4"], "Reponse"),
+]
+
+
+FRANCAIS_QUESTIONNAIRE = [
+    Question("Quel est la bonne ecriture ?", ["Je suis content", "Je suis contant", "Je suis contente", "Je suis contentes"], "1"),
+    Question("Quel est le verbe correct ?", ["Je vais", "Tu va", "Il va", "Nous allons"], "1"),
+    Question("Quel est le pluriel de 'cheval' ?", ["cheval", "chevals", "chevales", "chevaux"], "4"),
+    Question("Quel est le pluriel de 'animal' ?", ["animal", "animaux", "animales", "animauxes"], "2"),
+    Question("Quel est la bonne prononciation ?", ["Je suis content", "Je suis contant", "Je suis contente", "Je suis contentes"], "1")
+    # Question("Ajouter votre Question ici", ["Choix 1", "Choix 2", "Choix 3", "Choix 4"], "Reponse"),
+]
+
+
+CUSTOM_QUESTIONNAIRE = []
+
+histoire = Questionnaire(GEO_QUESTIONNAIRE)
+francais = Questionnaire(FRANCAIS_QUESTIONNAIRE)
+math = Questionnaire(MATH_QUESTIONNAIRE)
+custom = Questionnaire(CUSTOM_QUESTIONNAIRE)
+
+
+
+def sco():
+    global score
+    print(f"Votre score est de: {score}")
+    time.sleep(3)
+
+#--------------------------------------------Menu Principale Rapide--------------------------------------------------------------------------------
+while True:
+    os.system("cls")
+    menu = {
+        "1": histoire, "2": francais, "3": math, "4": custom, "5": Question_Custom
+    }
+    print("QUESTIONNAIRE:\n1. Histoire\n2. Francais\n3. Math\n4. Custom\n5. Ajouter Custom\nQ. Quitter")
+    choice = input("Choisissez une option: ").upper()
+    os.system("cls")
+    if choice in menu:
+        if choice == "5":
+            menu[choice]()
+        else:
+            menu[choice].lancer()
+            sco()
+    elif choice == "Q":
+        break
+    else:
+        print("Option invalide.")
+        time.sleep(2)
+
